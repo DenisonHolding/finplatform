@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InclusionIQ — Mastercard Center for Inclusive Growth</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+  :root {
+    --mc-red: #EB001B;
+    --mc-orange: #FF5F00;
+    --mc-yellow: #F79E1B;
+    --ink: #1a1a1a;
+    --paper: #f9f8f7;
+    --muted: #6b6b6b;
+    --border: #e2e0dd;
+    --surface: #ffffff;
+    --dark: #1a1a1a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: var(--dark);
+    position: sticky; top: 0; z-index: 100;
+  }
+
+  .nav-left { display: flex; align-items: center; gap: 20px; }
+
+  /* Mastercard logo mark (two overlapping circles) */
+  .mc-mark {
+    display: flex; align-items: center; position: relative;
+    width: 44px; height: 28px; flex-shrink: 0;
+  }
+  .mc-circle-r {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--mc-red); position: absolute; left: 0;
+  }
+  .mc-circle-y {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--mc-yellow); position: absolute; right: 0;
+    mix-blend-mode: normal;
+  }
+  .mc-overlap {
+    width: 10px; height: 26px; position: absolute; left: 17px;
+    background: var(--mc-orange); border-radius: 0;
+    clip-path: ellipse(50% 50% at 50% 50%);
+  }
+
+  .nav-brand {
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .nav-brand-top {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+    color: #fff; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .nav-brand-bottom {
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 300;
+    color: rgba(255,255,255,0.55); letter-spacing: 0.03em;
+  }
+
+  .nav-divider {
+    width: 1px; height: 28px; background: rgba(255,255,255,0.15);
+  }
+
+  .nav-product {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px;
+    color: #fff; letter-spacing: -0.3px;
+  }
+  .nav-product span { color: var(--mc-yellow); }
+
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-tag {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.5); text-transform: uppercase;
+  }
+  .nav-pill {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    border: 1px solid rgba(247,158,27,0.5); color: var(--mc-yellow);
+    padding: 3px 10px; border-radius: 2px; letter-spacing: 0.04em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--dark);
+    padding: 56px 40px 48px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--mc-yellow); margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(28px, 3.2vw, 48px); line-height: 1.06;
+    letter-spacing: -1.2px; color: #fff;
+  }
+  .hero h1 em { font-style: normal; color: var(--mc-yellow); }
+  .hero p { color: rgba(255,255,255,0.55); max-width: 420px; margin-top: 16px; font-size: 15px; }
+
+  .step-track { display: flex; flex-direction: column; gap: 0; }
+  .step-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.3);
+    width: 24px; flex-shrink: 0;
+  }
+  .step-label {
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: rgba(255,255,255,0.35);
+    flex: 1;
+  }
+  .step-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); flex-shrink: 0;
+  }
+  .step-row.active .step-num { color: var(--mc-yellow); }
+  .step-row.active .step-label { color: #fff; font-weight: 600; }
+  .step-row.active .step-dot { background: var(--mc-yellow); }
+  .step-row.done .step-num { color: var(--mc-red); }
+  .step-row.done .step-label { color: rgba(255,255,255,0.5); text-decoration: line-through; }
+  .step-row.done .step-dot { background: var(--mc-red); }
+
+  /* ── MAIN ── */
+  main { padding: 36px 40px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 6px; padding: 32px; margin-bottom: 24px;
+    display: none;
+  }
+  .panel.active { display: block; }
+
+  .panel-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .panel-label::before { content: ''; width: 14px; height: 2px; background: var(--mc-red); }
+  .panel-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 20px;
+    color: var(--ink); margin-bottom: 28px;
+  }
+
+  /* ── INPUTS ── */
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .field label {
+    display: block; font-family: 'DM Mono', monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .field select {
+    width: 100%; padding: 12px 16px;
+    border: 1.5px solid var(--border); border-radius: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    background: var(--paper); color: var(--ink);
+    appearance: none; cursor: pointer; transition: border-color .2s;
+  }
+  .field select:focus { outline: none; border-color: var(--mc-red); }
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '&#9662;'; position: absolute; right: 14px; top: 50%;
+    transform: translateY(-50%); pointer-events: none;
+    font-size: 11px; color: var(--muted);
+  }
+
+  /* ── SEGMENTS ── */
+  .seg-section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin: 28px 0 14px;
+  }
+  .segments { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 12px; }
+  .segment-card {
+    border: 1.5px solid var(--border); border-radius: 6px;
+    padding: 18px 16px; cursor: pointer; transition: all .2s; position: relative;
+    background: var(--surface);
+  }
+  .segment-card:hover { border-color: #aaa; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .segment-card.selected { border-color: var(--mc-red); background: #fff5f5; }
+  .segment-card.selected::after {
+    content: ''; position: absolute; top: -1px; right: -1px;
+    width: 0; height: 0;
+    border-style: solid; border-width: 0 22px 22px 0;
+    border-color: transparent var(--mc-red) transparent transparent;
+    border-radius: 0 6px 0 0;
+  }
+  .seg-icon { font-size: 24px; margin-bottom: 10px; }
+  .seg-name { font-weight: 600; font-size: 14px; color: var(--ink); }
+  .seg-desc { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+  /* ── BUTTON ── */
+  .btn-primary {
+    margin-top: 28px; padding: 14px 32px;
+    background: var(--mc-red); color: #fff;
+    border: none; border-radius: 4px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px;
+    transition: all .2s; display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-primary:hover { background: #cc0017; }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; background: var(--mc-red); }
+  .btn-secondary {
+    padding: 11px 24px; border: 1.5px solid var(--border); border-radius: 4px;
+    background: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px;
+    color: var(--ink); transition: all .2s;
+  }
+  .btn-secondary:hover { border-color: var(--ink); }
+
+  /* ── LOADING ── */
+  .loading { display: none; align-items: center; gap: 16px; padding: 28px 0; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 12px; }
+  .loading.active { display: flex; }
+  .mc-spinner {
+    position: relative; width: 28px; height: 28px; flex-shrink: 0;
+  }
+  .mc-spinner::before, .mc-spinner::after {
+    content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    animation: mcSpin 1.2s ease-in-out infinite alternate;
+  }
+  .mc-spinner::before { background: var(--mc-red); left: 0; top: 5px; }
+  .mc-spinner::after { background: var(--mc-yellow); right: 0; top: 5px; animation-delay: 0.6s; }
+  @keyframes mcSpin { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(1.1); opacity: 1; } }
+
+  /* ── CONTEXT PILL ── */
+  .context-pill {
+    display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    background: var(--dark); color: rgba(255,255,255,0.65);
+    padding: 7px 14px; border-radius: 4px; margin-bottom: 24px;
+  }
+  .context-pill b { color: var(--mc-yellow); font-weight: 500; }
+  .context-sep { color: rgba(255,255,255,0.2); }
+
+  /* ── SUMMARY BAR ── */
+  .summary-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1.5px solid var(--border); border-radius: 6px;
+    overflow: hidden; margin-bottom: 28px;
+  }
+  .sum-cell { padding: 20px 24px; border-right: 1.5px solid var(--border); }
+  .sum-cell:last-child { border-right: none; }
+  .sum-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px; line-height: 1; color: var(--ink); }
+  .sum-val.red { color: var(--mc-red); }
+  .sum-val.orange { color: var(--mc-orange); }
+  .sum-val.yellow { color: #c07c00; }
+  .sum-key { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 5px; letter-spacing: 0.04em; }
+
+  /* ── SDG CARDS ── */
+  .sdg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .sdg-card {
+    border: 1.5px solid var(--border); border-radius: 6px; padding: 20px;
+    position: relative; overflow: hidden; background: var(--surface);
+  }
+  .sdg-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; background: var(--sdg-color, var(--mc-red));
+  }
+  .sdg-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .sdg-badge {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+    padding: 3px 9px; border-radius: 3px; color: white;
+    background: var(--sdg-color, var(--mc-red)); white-space: nowrap;
+  }
+  .sdg-title { font-weight: 600; font-size: 14px; color: var(--ink); }
+  .sdg-challenge { color: var(--muted); font-size: 13px; margin-bottom: 16px; line-height: 1.55; }
+  .score-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 3px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); background: var(--sdg-color, var(--mc-red)); width: 0; }
+  .score-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .score-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .sev-badge { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; }
+  .sev-critical { background: #fee2e2; color: #991b1b; }
+  .sev-high { background: #ffedd5; color: #9a3412; }
+  .sev-medium { background: #fef9c3; color: #854d0e; }
+
+  /* ── REC CARDS ── */
+  .recs-intro { margin-bottom: 24px; }
+  .recs-intro-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 6px; }
+  .recs-intro-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+
+  .rec-items { display: flex; flex-direction: column; gap: 14px; }
+  .rec-item {
+    border: 1.5px solid var(--border); border-radius: 6px; padding: 22px 24px;
+    display: grid; grid-template-columns: 48px 1fr 88px; gap: 20px; align-items: start;
+    transition: border-color .2s, box-shadow .2s; background: var(--surface);
+  }
+  .rec-item:hover { border-color: #bbb; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .rec-index {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px;
+    color: var(--border); line-height: 1.1;
+  }
+  .rec-tag {
+    display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    background: #fff0f0; color: var(--mc-red);
+    padding: 3px 9px; border-radius: 3px; margin-bottom: 8px;
+  }
+  .rec-title { font-weight: 700; font-size: 16px; color: var(--ink); margin-bottom: 8px; }
+  .rec-desc { color: var(--muted); font-size: 14px; line-height: 1.65; }
+  .rec-sdgs { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+  .rec-sdg { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; }
+  .rec-score-col { text-align: right; }
+  .rec-score-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; color: var(--mc-red); line-height: 1; }
+  .rec-score-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 3px; }
+  .rec-effort { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .effort-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
+
+  /* ── FOOTER CTA ── */
+  .footer-cta {
+    border-top: 1.5px solid var(--border); margin-top: 36px; padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .mc-footer-brand {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted);
+  }
+
+  /* ── PAGE FOOTER ── */
+  footer {
+    background: var(--dark); padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between; margin-top: 60px;
+  }
+  .footer-left { display: flex; align-items: center; gap: 16px; }
+  .footer-text { font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.35); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.3); text-decoration: none; letter-spacing: 0.04em; }
+  .footer-links a:hover { color: rgba(255,255,255,0.6); }
+
+  /* ── ANIMATIONS ── */
+  .fade-in { animation: fadeUp 0.4s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    nav { padding: 0 20px; }
+    .hero { grid-template-columns: 1fr; padding: 40px 20px 36px; gap: 36px; }
+    main { padding: 24px 20px; }
+    .input-grid { grid-template-columns: 1fr; }
+    .summary-bar { grid-template-columns: 1fr 1fr; }
+    .rec-item { grid-template-columns: 1fr; }
+    .rec-index { display: none; }
+    .nav-tag { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-left">
+    <div class="mc-mark">
+      <div class="mc-circle-r"></div>
+      <div class="mc-overlap"></div>
+      <div class="mc-circle-y"></div>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-brand">
+      <div class="nav-brand-top">Mastercard</div>
+      <div class="nav-brand-bottom">Center for Inclusive Growth</div>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="nav-product">Inclusion<span>IQ</span></div>
+  </div>
+  <div class="nav-right">
+    <span class="nav-tag">Financial Inclusion Intelligence Platform</span>
+    <span class="nav-pill">BETA v0.1</span>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Center for Inclusive Growth &nbsp;&#xb7;&nbsp; Product Intelligence</div>
+    <h1>Design financial products for the <em>excluded.</em> Backed by SDG intelligence.</h1>
+    <p>An agentic research layer for product teams building financial services for underserved segments. Input a market, select your segment, and receive SDG-mapped barriers with tailored design recommendations.</p>
+  </div>
+  <div>
+    <div class="step-track" id="stepTrack">
+      <div class="step-row active" id="sr1">
+        <span class="step-num">01</span>
+        <span class="step-label">Configure Research Context</span>
+        <span class="step-dot"></span>
+      </div>
+      <div class="step-row" id="sr2">
+        <span class="step-num">02</span>
+        <span class="step-label">SDG Barrier Analysis</span>
+        <span class="step-dot"></span>
+      </div>
+      <div class="step-row" id="sr3">
+        <span class="step-num">03</span>
+        <span class="step-label">Design Recommendations</span>
+        <span class="step-dot"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- PANEL 1: INPUTS -->
+  <div class="panel active" id="panel1">
+    <div class="panel-label">Step 01</div>
+    <div class="panel-title">Configure Research Context</div>
+
+    <div class="input-grid">
+      <div class="field">
+        <label>Geography / Market</label>
+        <div class="select-wrap">
+          <select id="geo" onchange="checkReady()">
+            <option value="">Select a market&hellip;</option>
+            <optgroup label="Sub-Saharan Africa">
+              <option value="nigeria">Nigeria</option>
+              <option value="kenya">Kenya</option>
+              <option value="ghana">Ghana</option>
+              <option value="ethiopia">Ethiopia</option>
+              <option value="tanzania">Tanzania</option>
+              <option value="south_africa">South Africa</option>
+            </optgroup>
+            <optgroup label="South &amp; Southeast Asia">
+              <option value="indonesia">Indonesia</option>
+              <option value="india">India</option>
+              <option value="bangladesh">Bangladesh</option>
+              <option value="philippines">Philippines</option>
+              <option value="vietnam">Vietnam</option>
+            </optgroup>
+            <optgroup label="Latin America">
+              <option value="brazil">Brazil</option>
+              <option value="mexico">Mexico</option>
+              <option value="colombia">Colombia</option>
+              <option value="guatemala">Guatemala</option>
+            </optgroup>
+            <optgroup label="MENA">
+              <option value="egypt">Egypt</option>
+              <option value="morocco">Morocco</option>
+              <option value="jordan">Jordan</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Product Category</label>
+        <div class="select-wrap">
+          <select id="product">
+            <option value="">Select product type&hellip;</option>
+            <option value="payments">Payments &amp; Transfers</option>
+            <option value="savings">Savings &amp; Deposits</option>
+            <option value="credit">Credit &amp; Lending</option>
+            <option value="insurance">Insurance</option>
+            <option value="wallets">Digital Wallets</option>
+            <option value="msme">MSME Finance</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="seg-section-label">Target Customer Segment</div>
+    <div class="segments">
+      <div class="segment-card" data-seg="rural_women" onclick="selectSeg(this)">
+        <div class="seg-icon">&#128105;&#8205;&#127806;</div>
+        <div class="seg-name">Rural Women</div>
+        <div class="seg-desc">Low-income, informal sector, limited mobility</div>
+      </div>
+      <div class="segment-card" data-seg="migrants" onclick="selectSeg(this)">
+        <div class="seg-icon">&#127758;</div>
+        <div class="seg-name">Migrants &amp; Refugees</div>
+        <div class="seg-desc">No formal ID, cross-border needs, displaced</div>
+      </div>
+      <div class="segment-card" data-seg="youth" onclick="selectSeg(this)">
+        <div class="seg-icon">&#128241;</div>
+        <div class="seg-name">Youth (16&ndash;25)</div>
+        <div class="seg-desc">No credit history, student or gig economy</div>
+      </div>
+      <div class="segment-card" data-seg="msme" onclick="selectSeg(this)">
+        <div class="seg-icon">&#128722;</div>
+        <div class="seg-name">Informal MSMEs</div>
+        <div class="seg-desc">Cash-based, unregistered, volatile income</div>
+      </div>
+      <div class="segment-card" data-seg="elderly" onclick="selectSeg(this)">
+        <div class="seg-icon">&#128116;</div>
+        <div class="seg-name">Elderly &amp; Disabled</div>
+        <div class="seg-desc">Limited digital literacy, accessibility needs</div>
+      </div>
+      <div class="segment-card" data-seg="farmers" onclick="selectSeg(this)">
+        <div class="seg-icon">&#127806;</div>
+        <div class="seg-name">Smallholder Farmers</div>
+        <div class="seg-desc">Seasonal income, remote, land without title</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="analyzeBtn" disabled onclick="runAnalysis()">
+      Analyze Barriers &amp; Generate Insights &nbsp;&#8594;
+    </button>
+  </div>
+
+  <!-- PANEL 2: BARRIERS -->
+  <div class="panel" id="panel2">
+    <div id="loadingBar" class="loading">
+      <div class="mc-spinner"></div>
+      <span id="loadingText">Querying SDG indicator database&hellip;</span>
+    </div>
+    <div id="barriersContent" style="display:none">
+      <div class="panel-label">Step 02</div>
+      <div class="panel-title">SDG Barrier Analysis</div>
+      <div class="context-pill" id="contextPill"></div>
+      <div class="summary-bar" id="summaryBar"></div>
+      <div class="sdg-grid" id="sdgGrid"></div>
+      <button class="btn-primary" onclick="genRecs()" style="margin-top:32px">
+        Generate Design Recommendations &nbsp;&#8594;
+      </button>
+    </div>
+  </div>
+
+  <!-- PANEL 3: RECOMMENDATIONS -->
+  <div class="panel" id="panel3">
+    <div id="loadingRecs" class="loading">
+      <div class="mc-spinner"></div>
+      <span id="loadingRecsText">Generating design recommendations&hellip;</span>
+    </div>
+    <div id="recsContent" style="display:none">
+      <div class="panel-label">Step 03</div>
+      <div class="recs-intro">
+        <div class="recs-intro-title" id="recsTitle"></div>
+        <div class="recs-intro-sub" id="recsContext"></div>
+      </div>
+      <div class="rec-items" id="recsList"></div>
+      <div class="footer-cta">
+        <div class="mc-footer-brand">
+          <div class="mc-mark" style="width:32px;height:20px;">
+            <div class="mc-circle-r" style="width:18px;height:18px;"></div>
+            <div class="mc-overlap" style="left:11px;"></div>
+            <div class="mc-circle-y" style="width:18px;height:18px;"></div>
+          </div>
+          Mastercard Center for Inclusive Growth &nbsp;&middot;&nbsp; InclusionIQ
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn-secondary" onclick="resetAll()">&#8592; New Analysis</button>
+          <button class="btn-secondary" onclick="alert('In production: exports a formatted PDF brief with SDG barrier maps, design recommendations, and implementation roadmap &mdash; branded for the Center for Inclusive Growth.')">Export Report</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">
+    <div class="mc-mark">
+      <div class="mc-circle-r"></div>
+      <div class="mc-overlap"></div>
+      <div class="mc-circle-y"></div>
+    </div>
+    <div class="footer-text">
+      &copy; 2025 Mastercard Center for Inclusive Growth &nbsp;&middot;&nbsp; InclusionIQ is a research prototype
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About the Center</a>
+    <a href="#">SDG Methodology</a>
+    <a href="#">Data Sources</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
+
+<script>
+var selectedSeg = null;
+
+var GEO = {nigeria:"Nigeria",kenya:"Kenya",ghana:"Ghana",ethiopia:"Ethiopia",tanzania:"Tanzania",south_africa:"South Africa",indonesia:"Indonesia",india:"India",bangladesh:"Bangladesh",philippines:"Philippines",vietnam:"Vietnam",brazil:"Brazil",mexico:"Mexico",colombia:"Colombia",guatemala:"Guatemala",egypt:"Egypt",morocco:"Morocco",jordan:"Jordan"};
+var SEG = {rural_women:"Rural Women",migrants:"Migrants & Refugees",youth:"Youth (16-25)",msme:"Informal MSMEs",elderly:"Elderly & Disabled",farmers:"Smallholder Farmers"};
+
+var BARRIERS = {
+  rural_women:[
+    {sdg:"SDG 1",label:"No Poverty",color:"#E5243B",challenge:"High cost of financial services relative to micro-transaction sizes. Over 60% of rural women operate below the $3.65/day poverty line.",score:88,sev:"critical"},
+    {sdg:"SDG 5",label:"Gender Equality",color:"#FF3A21",challenge:"Social norms restrict independent financial decision-making. In many markets, husbands control access to accounts and mobile devices.",score:92,sev:"critical"},
+    {sdg:"SDG 8",label:"Decent Work",color:"#A21942",challenge:"Predominantly informal sector work means income is irregular, undocumented, and invisible to conventional credit scoring models.",score:76,sev:"high"},
+    {sdg:"SDG 10",label:"Reduced Inequalities",color:"#DD1367",challenge:"Geographic distance to nearest agent or branch averages 28km. Mobile network coverage often ends where rural settlements begin.",score:71,sev:"high"},
+    {sdg:"SDG 16",label:"Strong Institutions",color:"#00689D",challenge:"Lack of formal ID documentation. Many women have no national ID, birth certificate, or proof of address accepted by KYC requirements.",score:85,sev:"critical"}
+  ],
+  migrants:[
+    {sdg:"SDG 1",label:"No Poverty",color:"#E5243B",challenge:"Remittance costs consume 7-12% of transfers. A $200 transfer to corridor markets can cost $20-24, significantly reducing household income impact.",score:82,sev:"critical"},
+    {sdg:"SDG 10",label:"Reduced Inequalities",color:"#DD1367",challenge:"Host country KYC requirements exclude refugee IDs, UNHCR documentation, and foreign national IDs from onboarding flows.",score:94,sev:"critical"},
+    {sdg:"SDG 16",label:"Strong Institutions",color:"#00689D",challenge:"Legal status uncertainty creates fear of financial surveillance. Many migrants self-exclude due to data sharing concerns between banks and immigration authorities.",score:79,sev:"high"},
+    {sdg:"SDG 17",label:"Global Partnerships",color:"#19486A",challenge:"Diaspora-to-origin country payment rails rely on fragmented informal networks (hawala) due to lack of regulated low-cost options.",score:65,sev:"medium"},
+    {sdg:"SDG 8",label:"Decent Work",color:"#A21942",challenge:"Gig and informal employment in host country creates no payslip trail; creditworthiness is invisible despite regular income streams.",score:72,sev:"high"}
+  ],
+  youth:[
+    {sdg:"SDG 4",label:"Quality Education",color:"#C5192D",challenge:"No financial literacy in school curricula. First exposure to credit products is often predatory BNPL or mobile loan apps with triple-digit APRs.",score:68,sev:"medium"},
+    {sdg:"SDG 8",label:"Decent Work",color:"#A21942",challenge:"Gig economy dominates youth employment. Zero-hours contracts and platform income are not recognized by any standard credit bureau.",score:75,sev:"high"},
+    {sdg:"SDG 1",label:"No Poverty",color:"#E5243B",challenge:"No credit history creates a catch-22: can't access credit without history, can't build history without credit. Average time to first formal loan: 7 years.",score:80,sev:"high"},
+    {sdg:"SDG 10",label:"Reduced Inequalities",color:"#DD1367",challenge:"Minimum account balance and fee structures disproportionately punish micro-transactions typical of youth income patterns.",score:63,sev:"medium"},
+    {sdg:"SDG 9",label:"Industry & Innovation",color:"#FD6925",challenge:"Product UX defaults to desktop-first paradigms designed for older demographics. Mobile-first, conversational, social-native interfaces are rare.",score:55,sev:"medium"}
+  ],
+  msme:[
+    {sdg:"SDG 8",label:"Decent Work",color:"#A21942",challenge:"82% of MSMEs in target markets are unregistered. Without a business license or tax ID, they are invisible to formal credit underwriting.",score:91,sev:"critical"},
+    {sdg:"SDG 9",label:"Industry & Innovation",color:"#FD6925",challenge:"Working capital cycle is invisible - cash received and spent within hours. Traditional 90-day trade finance products are completely misaligned.",score:78,sev:"high"},
+    {sdg:"SDG 1",label:"No Poverty",color:"#E5243B",challenge:"Collateral gap: micro-merchants own stock, phones, relationships - not land or buildings. Asset-backed lending excludes them entirely.",score:85,sev:"critical"},
+    {sdg:"SDG 10",label:"Reduced Inequalities",color:"#DD1367",challenge:"Interest rates for informal MSME lending average 85-120% annualized from moneylenders due to no formal alternative.",score:88,sev:"critical"},
+    {sdg:"SDG 17",label:"Global Partnerships",color:"#19486A",challenge:"Distribution is fragmented: no aggregated channel to reach 40M+ informal merchants across a typical emerging market.",score:60,sev:"medium"}
+  ],
+  elderly:[
+    {sdg:"SDG 3",label:"Good Health",color:"#4C9F38",challenge:"Cognitive decline and visual impairment make standard mobile banking unusable. 68% of over-65s in target markets have never used a smartphone app.",score:80,sev:"high"},
+    {sdg:"SDG 10",label:"Reduced Inequalities",color:"#DD1367",challenge:"Digital-only migration leaves elderly customers stranded as branches close. Average branch closure rate: 12% annually across target markets.",score:75,sev:"high"},
+    {sdg:"SDG 1",label:"No Poverty",color:"#E5243B",challenge:"Pension and social transfer systems require biometric authentication that elderly customers often cannot complete independently.",score:70,sev:"high"},
+    {sdg:"SDG 16",label:"Strong Institutions",color:"#00689D",challenge:"Financial abuse targeting: elderly customers are 3x more likely to be victims of financial fraud due to social isolation and digital unfamiliarity.",score:85,sev:"critical"}
+  ],
+  farmers:[
+    {sdg:"SDG 2",label:"Zero Hunger",color:"#DDA63A",challenge:"Seasonal income means creditworthiness collapses between harvests. Traditional monthly repayment schedules are misaligned with annual harvest cycles.",score:90,sev:"critical"},
+    {sdg:"SDG 1",label:"No Poverty",color:"#E5243B",challenge:"Land titling gaps mean farmers can't use land as collateral. Over 70% of smallholder land in Sub-Saharan Africa is undocumented.",score:87,sev:"critical"},
+    {sdg:"SDG 13",label:"Climate Action",color:"#3F7E44",challenge:"Increasing weather volatility destroys crops and loan repayment capacity. Parametric insurance products remain inaccessible or unaffordable.",score:79,sev:"high"},
+    {sdg:"SDG 9",label:"Industry & Innovation",color:"#FD6925",challenge:"No digital transaction history - cash economy means no data trail that could enable alternative credit scoring via behavior.",score:83,sev:"critical"},
+    {sdg:"SDG 8",label:"Decent Work",color:"#A21942",challenge:"Input finance gap: inability to pre-purchase seeds, fertilizer, or equipment at optimal times forces suboptimal growing decisions.",score:76,sev:"high"}
+  ]
+};
+
+var RECS = {
+  rural_women:[
+    {tag:"KYC Architecture",title:"Tiered KYC with USSD Fallback",desc:"Implement a 3-tier KYC framework: Tier 1 allows account opening with name + mobile number (limited to $50 balance), Tier 2 adds community-verified identity using village chief or local NGO attestation, Tier 3 adds biometric at agent. Pair with USSD channel so feature phones can transact without app installation.",impact:94,effort:"Medium",sdgs:["SDG 1","SDG 5","SDG 16"],colors:["#E5243B","#FF3A21","#00689D"]},
+    {tag:"Product Architecture",title:"Group-Linked Savings (VSLA Model)",desc:"Design savings products that operate at group level, mirroring Village Savings and Loan Association dynamics. Shared liability reduces individual credit risk while social structures provide natural enforcement. Integrate with existing women's groups (churches, cooperatives) as distribution anchors.",impact:89,effort:"Low",sdgs:["SDG 1","SDG 5","SDG 8"],colors:["#E5243B","#FF3A21","#A21942"]},
+    {tag:"Distribution",title:"Women-Only Agent Network Points",desc:"Designate female-only agent touchpoints to eliminate mobility and social permission barriers. Train women agents from within communities. Mobile agent pilots in Nigeria and Kenya have shown 40% higher activation rates for women customers when the agent is female.",impact:81,effort:"High",sdgs:["SDG 5","SDG 10"],colors:["#FF3A21","#DD1367"]},
+    {tag:"Credit Underwriting",title:"Proxy Scoring via Airtime & Utility Data",desc:"Replace credit bureau dependency with airtime purchase patterns, mobile data usage, and PAYG utility repayment history as primary underwriting signals. Models trained on this data achieve 80%+ accuracy for repayment prediction with no formal financial history required.",impact:86,effort:"Medium",sdgs:["SDG 1","SDG 8","SDG 10"],colors:["#E5243B","#A21942","#DD1367"]}
+  ],
+  migrants:[
+    {tag:"KYC Architecture",title:"Biometric-Only Onboarding with UNHCR Integration",desc:"Accept UNHCR refugee cards, IOM documentation, and national IDs from 40+ origin countries. Implement liveness-based facial biometric as primary KYC for Tier 1 accounts. Partner with UNHCR's ID2020 program for consent-based API data sharing.",impact:96,effort:"High",sdgs:["SDG 10","SDG 16","SDG 17"],colors:["#DD1367","#00689D","#19486A"]},
+    {tag:"Remittance",title:"Direct-to-Mobile Corridor Payments",desc:"Build dedicated low-cost corridors to top 10 remittance destinations using stablecoin settlement layer (e.g., USDC on Stellar). Target sub-1.5% cost vs. 7-12% Western Union average. Auto-convert at receiver end to local mobile money. No recipient account required.",impact:92,effort:"High",sdgs:["SDG 1","SDG 10","SDG 17"],colors:["#E5243B","#DD1367","#19486A"]},
+    {tag:"Privacy Architecture",title:"Data Segregation & Zero-Disclosure Design",desc:"Implement strict data segregation preventing sharing of transaction or location data with immigration authorities unless court-ordered. Communicate policy clearly in-app. Consider ZK proof-based identity verification for sensitive use cases. Directly addresses self-exclusion behavior.",impact:79,effort:"Medium",sdgs:["SDG 10","SDG 16"],colors:["#DD1367","#00689D"]},
+    {tag:"Credit Underwriting",title:"Gig Income Verification via Platform APIs",desc:"Integrate with Uber, Bolt, Grab, Rappi, and other gig platforms to verify consistent income as creditworthiness signal. A driver with 18 months of trip history is a better credit risk than a formal employee with 3 months on payroll.",impact:75,effort:"Medium",sdgs:["SDG 8","SDG 1"],colors:["#A21942","#E5243B"]}
+  ],
+  youth:[
+    {tag:"Product Architecture",title:"Credit-Builder Secured Card (Prepaid Bridge)",desc:"Start with prepaid: youth deposits $5-20 to 'secure' a credit limit equal to their deposit. Every repayment is reported to the credit bureau, building history. After 12 months of on-time repayment, convert to unsecured. Reduces time-to-credit-score from 7 years to 14 months.",impact:91,effort:"Low",sdgs:["SDG 1","SDG 8","SDG 10"],colors:["#E5243B","#A21942","#DD1367"]},
+    {tag:"Onboarding UX",title:"Conversational Onboarding via WhatsApp",desc:"Replace form-based KYC with a conversational flow. Youth complete identity verification via selfie + ID photo in 90 seconds via the messaging app they already use. Reduces drop-off at onboarding by 65% vs. native app based on field pilots in Kenya and Indonesia.",impact:83,effort:"Low",sdgs:["SDG 9","SDG 10"],colors:["#FD6925","#DD1367"]},
+    {tag:"Credit Underwriting",title:"Education Data Credit Scoring",desc:"Use university enrollment status, exam result APIs, and institutional partnerships as creditworthiness proxies. A student enrolled in a technical program is a better forward-looking risk than their current income suggests. Supplement with consented social graph analysis.",impact:77,effort:"Medium",sdgs:["SDG 4","SDG 8","SDG 1"],colors:["#C5192D","#A21942","#E5243B"]},
+    {tag:"Financial Education",title:"Embedded Literacy with Earned Rewards",desc:"Integrate 2-minute financial education micro-modules into product onboarding. Complete module = earn a credit limit increase or cashback reward. Users who complete 3+ modules have 34% lower default rates. Makes education feel like a product feature, not a prerequisite.",impact:68,effort:"Low",sdgs:["SDG 4","SDG 1"],colors:["#C5192D","#E5243B"]}
+  ],
+  msme:[
+    {tag:"KYC Architecture",title:"Business Identity via Transaction History",desc:"Replace business registration requirement with 90-day mobile money transaction history as proxy for business existence. An informal merchant processing $2,000/month is demonstrably in business. Partner with telcos and mobile money operators for consented data sharing.",impact:95,effort:"Medium",sdgs:["SDG 8","SDG 1","SDG 16"],colors:["#A21942","#E5243B","#00689D"]},
+    {tag:"Credit Underwriting",title:"Daily Revenue-Based Repayment",desc:"Replace fixed monthly repayment with daily micro-sweep: auto-debit 3-8% of daily sales from merchant's mobile money wallet. Aligns repayment to cash flow reality. Default rates 40% lower than fixed-schedule equivalents. No collateral required.",impact:92,effort:"High",sdgs:["SDG 8","SDG 1","SDG 10"],colors:["#A21942","#E5243B","#DD1367"]},
+    {tag:"Distribution",title:"FMCG Distributor Partnership Rails",desc:"Embed finance at point of inventory purchase by partnering with FMCG distributors (Unilever, Coca-Cola, Diageo networks). Merchant creditworthiness informed by purchase order history with distributor. Distribution cost near-zero by riding existing sales rep infrastructure.",impact:88,effort:"High",sdgs:["SDG 8","SDG 9","SDG 17"],colors:["#A21942","#FD6925","#19486A"]},
+    {tag:"Product Architecture",title:"Merchant Prepaid + Overdraft Buffer",desc:"Core product is prepaid wallet (zero credit risk) with an overdraft buffer unlocked after 60 days of activity. Buffer starts at $10 and scales with volume. Feels like credit, underwritten as earned float. Regulatory capital requirements significantly lower than formal credit products.",impact:85,effort:"Low",sdgs:["SDG 8","SDG 1","SDG 10"],colors:["#A21942","#E5243B","#DD1367"]}
+  ],
+  elderly:[
+    {tag:"Accessibility UX",title:"Voice-First & Large-Button Interface Mode",desc:"Implement accessibility mode at onboarding: voice commands for all transactions, high-contrast large-button UI, simplified 3-step maximum transaction flows. Partner with Android/iOS accessibility APIs. Remove non-essential features from default view to reduce cognitive load.",impact:88,effort:"Medium",sdgs:["SDG 3","SDG 10"],colors:["#4C9F38","#DD1367"]},
+    {tag:"Distribution",title:"Assisted Onboarding via Trusted Intermediaries",desc:"Build agent-assisted flow where a family member, community health worker, or staff completes setup on behalf of customer with full consent logging. Allow 'trusted contact' designation who can transact on their behalf within daily limits.",impact:82,effort:"Low",sdgs:["SDG 3","SDG 10","SDG 16"],colors:["#4C9F38","#DD1367","#00689D"]},
+    {tag:"Fraud Prevention",title:"Behavioral Anomaly Alerts to Trusted Contacts",desc:"With explicit consent, flag unusual transaction patterns (large transfers, new payees, unusual hours) and send alert to a pre-designated trusted contact before the transaction completes. 5-minute confirmation window. Reduces elderly financial fraud by an estimated 60%.",impact:90,effort:"Medium",sdgs:["SDG 16","SDG 1","SDG 3"],colors:["#00689D","#E5243B","#4C9F38"]}
+  ],
+  farmers:[
+    {tag:"Product Architecture",title:"Harvest-Aligned Bullet Loan",desc:"Replace monthly repayment with a single bullet repayment at harvest. Offer 6 and 12-month tenors aligned to specific crop cycles. Integrate with crop calendar APIs and weather data to auto-flag accounts in drought-affected regions for payment deferral. Default rates drop 35%.",impact:94,effort:"Low",sdgs:["SDG 2","SDG 1","SDG 8"],colors:["#DDA63A","#E5243B","#A21942"]},
+    {tag:"Credit Underwriting",title:"Satellite & Agri-Data Credit Scoring",desc:"Use satellite imagery (NDVI crop health indices), weather station data, and soil quality APIs as primary underwriting variables. Partner with agri-tech platforms (Farmerline, Hello Tractor) for ground-truth transaction data. No financial history required.",impact:91,effort:"High",sdgs:["SDG 2","SDG 9","SDG 13"],colors:["#DDA63A","#FD6925","#3F7E44"]},
+    {tag:"Insurance",title:"Parametric Weather Index Insurance (Bundled)",desc:"Auto-bundle parametric weather insurance with every agricultural loan. Triggers payout if rainfall or temperature index breaches a defined threshold - no claims process required. Price into loan spread. Removes climate risk as the single biggest barrier to farmer creditworthiness.",impact:89,effort:"High",sdgs:["SDG 2","SDG 13","SDG 1"],colors:["#DDA63A","#3F7E44","#E5243B"]},
+    {tag:"Distribution",title:"Input Finance via Agri-Dealer Network",desc:"Disburse credit directly to agri-input dealers (seeds, fertilizer, pesticides) rather than as cash. Farmer selects inputs; dealer receives payment from lender; farmer repays at harvest. Prevents fund diversion and leverages existing dealer distribution infrastructure.",impact:86,effort:"Medium",sdgs:["SDG 2","SDG 8","SDG 17"],colors:["#DDA63A","#A21942","#19486A"]}
+  ]
+};
+
+function selectSeg(el) {
+  document.querySelectorAll('.segment-card').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+  selectedSeg = el.dataset.seg;
+  checkReady();
+}
+
+function checkReady() {
+  var geo = document.getElementById('geo').value;
+  document.getElementById('analyzeBtn').disabled = !(geo && selectedSeg);
+}
+
+function setStep(active, done) {
+  ['sr1','sr2','sr3'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    el.classList.remove('active','done');
+    if (i+1 === active) el.classList.add('active');
+    if (i+1 < active) el.classList.add('done');
+  });
+}
+
+function runAnalysis() {
+  var geo = document.getElementById('geo').value;
+  document.getElementById('panel1').classList.remove('active');
+  document.getElementById('panel2').classList.add('active');
+  setStep(2);
+
+  var lb = document.getElementById('loadingBar');
+  lb.classList.add('active');
+  var msgs = [
+    "Querying SDG indicator database for " + GEO[geo] + "...",
+    "Mapping " + SEG[selectedSeg] + " exclusion barriers...",
+    "Scoring challenges against SDG framework...",
+    "Preparing barrier analysis..."
+  ];
+  var i = 0;
+  var iv = setInterval(function(){ if(i < msgs.length) document.getElementById('loadingText').textContent = msgs[i++]; }, 750);
+
+  setTimeout(function(){
+    clearInterval(iv);
+    lb.classList.remove('active');
+    showBarriers(geo);
+  }, 3300);
+}
+
+function showBarriers(geo) {
+  var barriers = BARRIERS[selectedSeg] || [];
+  var productEl = document.getElementById('product');
+  var productLabel = productEl.value ? productEl.options[productEl.selectedIndex].text : "Financial Services";
+
+  var pill = document.getElementById('contextPill');
+  pill.innerHTML = '<b>' + GEO[geo] + '</b><span class="context-sep">&nbsp;/&nbsp;</span><b>' + SEG[selectedSeg] + '</b><span class="context-sep">&nbsp;/&nbsp;</span>' + productLabel;
+
+  var avgScore = Math.round(barriers.reduce(function(s,b){return s+b.score;},0) / barriers.length);
+  var critical = barriers.filter(function(b){return b.sev==='critical';}).length;
+  var recCount = (RECS[selectedSeg]||[]).length;
+
+  document.getElementById('summaryBar').innerHTML =
+    '<div class="sum-cell"><div class="sum-val red">' + barriers.length + '</div><div class="sum-key">SDG DIMENSIONS MAPPED</div></div>' +
+    '<div class="sum-cell"><div class="sum-val red">' + critical + '</div><div class="sum-key">CRITICAL BARRIERS</div></div>' +
+    '<div class="sum-cell"><div class="sum-val">' + avgScore + '</div><div class="sum-key">AVG EXCLUSION SCORE /100</div></div>' +
+    '<div class="sum-cell"><div class="sum-val orange">' + recCount + '</div><div class="sum-key">DESIGN SOLUTIONS QUEUED</div></div>';
+
+  var grid = document.getElementById('sdgGrid');
+  grid.innerHTML = barriers.map(function(b,i){
+    return '<div class="sdg-card fade-in" style="--sdg-color:' + b.color + '; animation-delay:' + (i*0.08) + 's">' +
+      '<div class="sdg-header"><span class="sdg-badge">' + b.sdg + '</span><span class="sdg-title">' + b.label + '</span></div>' +
+      '<div class="sdg-challenge">' + b.challenge + '</div>' +
+      '<div class="score-bar"><div class="score-fill" data-w="' + b.score + '"></div></div>' +
+      '<div class="score-meta"><span class="score-num">Exclusion Impact &nbsp; ' + b.score + '/100</span><span class="sev-badge sev-' + b.sev + '">' + b.sev.toUpperCase() + '</span></div>' +
+      '</div>';
+  }).join('');
+
+  document.getElementById('barriersContent').style.display = 'block';
+
+  setTimeout(function(){
+    document.querySelectorAll('.score-fill').forEach(function(el){
+      el.style.width = el.dataset.w + '%';
+    });
+  }, 150);
+}
+
+function genRecs() {
+  document.getElementById('panel2').classList.remove('active');
+  document.getElementById('panel3').classList.add('active');
+  setStep(3);
+
+  var lr = document.getElementById('loadingRecs');
+  lr.classList.add('active');
+  var msgs = [
+    "Analyzing barrier root causes...",
+    "Matching design patterns to SDG gaps...",
+    "Scoring solution impact vs. implementation effort...",
+    "Generating product design recommendations..."
+  ];
+  var i = 0;
+  var iv = setInterval(function(){ if(i < msgs.length) document.getElementById('loadingRecsText').textContent = msgs[i++]; }, 850);
+
+  setTimeout(function(){
+    clearInterval(iv);
+    lr.classList.remove('active');
+    showRecs();
+  }, 3800);
+}
+
+function showRecs() {
+  var geo = document.getElementById('geo').value;
+  var recs = RECS[selectedSeg] || [];
+  var productEl = document.getElementById('product');
+  var productLabel = productEl.value ? productEl.options[productEl.selectedIndex].text : "Financial Services";
+
+  document.getElementById('recsTitle').textContent = productLabel + ' for ' + SEG[selectedSeg] + ' in ' + GEO[geo];
+  document.getElementById('recsContext').textContent = recs.length + ' design solutions ranked by SDG impact score  \u00b7  Center for Inclusive Growth  \u00b7  InclusionIQ';
+
+  var effortColors = {Low:"#16a34a", Medium:"#d97706", High:"#dc2626"};
+  var sorted = recs.slice().sort(function(a,b){return b.impact-a.impact;});
+
+  document.getElementById('recsList').innerHTML = sorted.map(function(r,i){
+    var sdgTags = r.sdgs.map(function(s,j){
+      return '<span class="rec-sdg" style="background:' + r.colors[j] + '18; color:' + r.colors[j] + '">' + s + '</span>';
+    }).join('');
+    var effortColor = effortColors[r.effort] || '#666';
+    var numStr = (i+1) < 10 ? '0' + (i+1) : '' + (i+1);
+    return '<div class="rec-item fade-in" style="animation-delay:' + (i*0.07) + 's">' +
+      '<div class="rec-index">' + numStr + '</div>' +
+      '<div><span class="rec-tag">' + r.tag + '</span><div class="rec-title">' + r.title + '</div><div class="rec-desc">' + r.desc + '</div><div class="rec-sdgs">' + sdgTags + '</div></div>' +
+      '<div class="rec-score-col"><div class="rec-score-num">' + r.impact + '</div><div class="rec-score-label">IMPACT SCORE</div><div class="rec-effort"><span class="effort-dot" style="background:' + effortColor + '"></span>' + r.effort + ' Effort</div></div>' +
+      '</div>';
+  }).join('');
+
+  document.getElementById('recsContent').style.display = 'block';
+}
+
+function resetAll() {
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.getElementById('panel1').classList.add('active');
+  setStep(1);
+  document.getElementById('barriersContent').style.display = 'none';
+  document.getElementById('recsContent').style.display = 'none';
+  document.querySelectorAll('.segment-card').forEach(function(c){c.classList.remove('selected');});
+  document.getElementById('geo').value = '';
+  document.getElementById('product').value = '';
+  selectedSeg = null;
+  document.getElementById('analyzeBtn').disabled = true;
+}
+</script>
+</body>
+</html>
